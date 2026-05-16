@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX MATRIX - Admin Bridge Gateway</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-admin: #06080a;
+            --bg-card: #0d1117;
+            --border-color: #21262d;
+            --text-main: #c9d1d9;
+            --neon-orange: #ff5a00;
+            --neon-green: #238636;
+            --neon-blue: #1f6feb;
+        }
+        * {
+            margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif;
+        }
+        body {
+            background-color: var(--bg-admin);
+            color: var(--text-main);
+            padding: 30px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo-zone h1 {
+            font-size: 26px;
+            font-weight: 900;
+            color: #fff;
+        }
+        .logo-zone span {
+            color: var(--neon-orange);
+            font-size: 14px;
+        }
+        
+        /* 🚨 زرار الطوارئ الحديدي (The Red Button) */
+        .emergency-control-box {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .emergency-active {
+            border-color: var(--neon-orange) !important;
+            box-shadow: 0 0 15px rgba(255, 90, 0, 0.1);
+        }
+        .btn-panic {
+            background-color: #da3633;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-panic:hover { background-color: #f85149; }
+        
+        /* لوحة التحكم والبيانات */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .panel-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 300px;
+        }
+        .panel-card h3 {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .table-view {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .table-view th, .table-view td {
+            text-align: right; padding: 10px; border-bottom: 1px solid var(--border-color);
+        }
+        .table-view th { color: #8b949e; }
+        
+        .badge {
+            padding: 2px 6px; border-radius: 4px; font-size: 12px; font-weight: bold;
+        }
+        .bg-pending { background-color: rgba(218, 165, 32, 0.15); color: #daaa16; }
+        .bg-success { background-color: rgba(35, 134, 54, 0.15); color: #56d364; }
+        
+        .btn-action-xs {
+            background: none; border: 1px solid var(--border-color); color: #fff;
+            padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;
+        }
+        .btn-action-xs:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-zone">
+            <h1>APEX MATRIX 👑</h1>
+            <span>بوابة التحكم الجسر والمزامنة الحية (يوسف & بحر)</span>
+        </div>
+        <div class="admin-profile">
+            <i class="fas fa-user-shield"></i> مُطوّر المنظومة
+        </div>
+    </header>
+
+    <section class="emergency-control-box" id="panic-box">
+        <div class="panic-text">
+            <h3><i class="fas fa-radiation text-orange"></i> مفتاح الحظر والوضع الدفاعي للمنصة (Emergency Lockdown)</h3>
+            <p style="color: #8b949e; font-size: 13px; margin-top: 5px;">عند تفعيل هذا الزرار، سيتم قفل واجهة المستخدمين بالكامل فوراً وتجميد عمليات السحب لحين إشعار آخر.</p>
+        </div>
+        <button class="btn-panic" id="btn-lockdown-toggle">تفعيل الإغلاق الحديدي 🔒</button>
+    </section>
+
+    <main class="admin-grid">
+        
+        <div class="panel-card" id="deposits-panel">
+            <h3><i class="fas fa-wallet" style="color: var(--neon-green);"></i> طلبات تمويل الكابيتال المعلقة</h3>
+            <table class="table-view">
+                <thead>
+                    <tr>
+                        <th>كود المستخدم</th>
+                        <th>الباقة</th>
+                        <th>الـ TXID</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody id="deposit-rows">
+                    <tr>
+                        <td>usr_9281x</td>
+                        <td><span class="badge bg-success">VIP Solo ($110)</span></td>
+                        <td><code style="color:var(--neon-blue)">TYu78X...</code></td>
+                        <td><button class="btn-action-xs">موافقة وتفعيل</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel-card" id="kyc-panel">
+            <h3><i class="fas fa-id-card" style="color: var(--neon-blue);"></i> ملفات توثيق الـ KYC المرفوعة</h3>
+            <table class="table-view">
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>الرقم القومي</th>
+                        <th>الحالة</th>
+                        <th>الملف</th>
+                    </tr>
+                </thead>
+                <tbody id="kyc-rows">
+                    <tr>
+                        <td>كريم الزناري</td>
+                        <td><code>290929**********</code></td>
+                        <td><span class="badge bg-pending">قيد المراجعة</span></td>
+                        <td><button class="btn-action-xs">فتح الفولدر</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+        // إعدادات مشروعك الحقيقية لـ Matrix
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPVk3WfBQsF6mu_taU6X30KDdVhmATr_E",
+            authDomain: "matrix-2e69e.firebaseapp.com",
+            projectId: "matrix-2e69e",
+            storageBucket: "matrix-2e69e.firebasestorage.app",
+            messagingSenderId: "825284857847",
+            appId: "1:825284857847:web:11a15cb6202a8365b5a8f2",
+            measurementId: "G-CBLHD3F66Z"
+        };
+
+        // تشغيل الفايربيز
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        console.log("📡 [MATRIX BRIDGE] Firebase Connected successfully to Admin Gateway.");
+
+        // هنا في الملف القادم (AdminCore.js) هنكتب دالات السحب والتحكم والـ Listeners بالكامل!
+    </script>
+</body>
+</html>
