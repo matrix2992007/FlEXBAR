@@ -1,0 +1,168 @@
+/**
+ * APEX MATRIX - Admin Bridge Stylesheet (AdminStyles.css)
+ * Theme: Premium Cyberpunk Dark Grid (#06080a)
+ * Architecture: Clean Responsive Layout
+ * Developers: Mark (Youssef) & Maro
+ */
+
+/* 1. إعدادات الخطوط والتهيئة العامة */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+body {
+    background-color: #06080a;
+    color: #c9d1d9;
+    font-family: 'Cairo', sans-serif;
+    padding: 30px;
+    direction: rtl;
+}
+
+/* 2. الهيدر وشريط التاج العلوي */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #21262d;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.logo-zone h1 {
+    font-size: 28px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.logo-zone span {
+    color: #ff5a00;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.admin-profile {
+    background-color: #0d1117;
+    border: 1px solid #21262d;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    color: #58a6ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 3. صندوق مفتاح الطوارئ (Emergency Panel Glow) */
+.emergency-control-box {
+    background-color: #0d1117;
+    border: 1px solid #21262d;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 35px;
+    transition: all 0.4s ease;
+}
+
+.emergency-active {
+    border-color: #ff5a00 !important;
+    box-shadow: 0 0 20px rgba(255, 90, 0, 0.15);
+    background-color: rgba(255, 90, 0, 0.02);
+}
+
+.panic-text h3 {
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.text-orange { color: #ff5a00; }
+
+/* 4. شبكة الكروت والبيانات (Admin Grid) */
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 25px;
+}
+
+.panel-card {
+    background-color: #0d1117;
+    border: 1px solid #21262d;
+    border-radius: 10px;
+    padding: 22px;
+    min-height: 350px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.panel-card h3 {
+    border-bottom: 1px solid #21262d;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+}
+
+/* 5. تصميم الجداول الذكية وعرض الـ TXID */
+.table-view {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table-view th {
+    color: #8b949e;
+    font-weight: 600;
+    padding: 12px 10px;
+    border-bottom: 2px solid #21262d;
+    text-align: right;
+}
+
+.table-view td {
+    padding: 14px 10px;
+    border-bottom: 1px solid #21262d;
+    color: #c9d1d9;
+    vertical-align: middle;
+}
+
+/* الشارات والأوسمة (Status Badges) */
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.bg-pending { background-color: rgba(218, 165, 32, 0.12); color: #f2c94c; border: 1px solid rgba(218, 165, 32, 0.2); }
+.bg-success { background-color: rgba(46, 160, 67, 0.12); color: #56d364; border: 1px solid rgba(46, 160, 67, 0.2); }
+
+/* أزرار الإجراءات الفورية السريعة */
+.btn-action-xs {
+    background-color: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-action-xs:hover {
+    border-color: #58a6ff;
+    color: #58a6ff;
+    background-color: rgba(88, 166, 255, 0.05);
+}
+
+/* 6. توافق الشاشات للموبايل */
+@media (max-width: 768px) {
+    body { padding: 15px; }
+    header { flex-direction: column; gap: 15px; text-align: center; }
+    .emergency-control-box { flex-direction: column; gap: 20px; text-align: center; }
+    .admin-grid { grid-template-columns: 1fr; }
+}
